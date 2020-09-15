@@ -1,0 +1,140 @@
+<div class="bg-dark" style="height: 50px; width: 65%; margin: auto; margin-top:10px ;">
+    <h3 class="" style="text-align:center; color: white;">VComandas</h3>
+</div>
+    <h3 style="margin-top:20px; text-align:center;">Cadastro</h3>
+    <!--Div de aviso-->
+    <div id="ERROR" style="width:100%; height: 60%; padding: 10px; border-radius: 25px; text-align: center; background: crimson; color: white; display: none;">
+        <h4 id="msn_erro">ERRO AO CADASTRAR </h4>
+        <p>Já existe um usuário cadastrado com o e-mail informado</p>
+    </div>
+    <form id="form">
+        <div class="form-row" id="formR" style="margin-top: 20px;">
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" placeholder="Nome" name="Nome" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Sobrenome" name="Sobrenome" required>
+    </div>
+    <div class="form-group col-md-12">
+        <input type="text" class="form-control" placeholder="CEP" id="cep" name="cep" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Cidade" id="cidade" name="cidade" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Estado" id="estado" name="estado" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="CNPJ" id="cnpj" name="cnpj" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Telefone Para Contato" name="telefone" id="tel" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Nome Da Empresa" name="nomeEmpresa" required>
+    </div>
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" placeholder="Endereço Completo Da Empresa" name="enderecoEmpresa" required>
+    </div>
+    <div class="form-group col-md-12">
+        <input type="email" class="form-control" placeholder="E-mail" name="email" required>
+    </div>
+    <div class="alert alert-light col-md-12" id="alert_senha" style="margin: 0px; display: none;" role="alert">
+        <i class="fas fa-exclamation-triangle"></i> A senha tem que ter mais de 6 caracteres.
+    </div>
+    <div class="alert alert-light col-md-12" id="alert_senha2" style="margin: 0px; display: none;" role="alert">
+        <i class="fas fa-exclamation-triangle"></i> As senhas não estão iguais.
+    </div>
+    <div class="form-group col-md-12" id="divSenha01">
+        <input type="password" class="form-control senha" placeholder="Senha" id="senha01" name="senha01" required>
+    </div>
+    <div class="form-group col-md-12">
+        <input type="password" class="form-control" placeholder="Confirmar Senha" id="senha02" name="senha02" required>
+    </div>
+    <div class="form-group col-md-6 ">
+        <a class="btn btn-secondary btn-lg btn-block"  href="javascript:history.back();">Cancelar</a>
+    </div>
+    <div class="form-group col-md-6">
+        <button class="btn btn-primary btn-lg btn-block"  id="cad">Cadastrar</button>
+    </div>
+</div>
+</form>
+<script>
+    
+    $(document).ready(function(){
+        $("#cnpj").mask("00.000.000/0000-00");
+        $("#cep").mask("00000-000");
+        $("#tel").mask("(00) 00000 0000");
+        
+        $("#cep").keyup(function(){
+            if( $("#cep").val().length == 9){
+                cep($("#cep").val());
+            }
+        });
+        $("#cad").click(function(){
+            senha01=$("#senha01").val();
+            senha02=$("#senha02").val();
+                if(senha01!=senha02){
+                    aviso();
+                    return false;
+                }else{
+                    $("#senha01").removeClass("border border-danger");
+                    $("#senha02").removeClass("border border-danger");
+                    $("#alert_senha2").hide("slow");
+                }
+        });
+        $(".senha").keyup(function(){
+            if($(this).val().length >6){
+                $("#alert_senha").hide("slow");
+            }else{
+               $("#alert_senha").show("slow");
+            }
+        })
+
+        function cep(cep){
+            url="https://viacep.com.br/ws/"+cep+"/json/";
+            $.ajax({
+               "url": url,
+               "type":"GET",
+               success:function(dados){
+                $("#cidade").val(dados["localidade"]);
+                $("#estado").val(dados["uf"]);
+               }
+            });
+        }
+        function aviso(){
+            $("#senha01").addClass("border border-danger");
+            $("#senha02").addClass("border border-danger");
+            $("#alert_senha2").show("slow");
+            return false;
+        }
+
+        $("#form").submit(function(){
+                dadosUser=$(this).serializeArray();
+                if($(".senha").val().length<6){
+                }else if($("#senha01").val()!=$("#senha02").val()){
+                    aviso();
+                }else{
+                    cadastrar(dadosUser);
+                }
+                
+                return false;
+        })
+        
+        function cadastrar(dados){
+            $.ajax({
+                url:'php/cadastro.php',
+                method:'POST',
+                dataType: "JSON",
+                data:{nome:dados[0].value,sobrenome:dados[1].value,cep:dados[2].value,cnpj:dados[5].value,telefone:dados[6].value,cidade:dados[3].value,estado:dados[4].value,nomeEmpresa:dados[7].value,enderecoEmpresa:dados[8].value,email:dados[9].value,senha01:dados[10].value,senha02:dados[11].value},
+                success:function(dado){
+                    if(dado.error == true){
+                        $("#ERROR").slideDown("slow");
+                    }
+                }
+            });
+        }
+
+    });
+    
+    </script>
