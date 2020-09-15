@@ -1,0 +1,5 @@
+RewriteEngine on
+
+RewriteRule ^c/([0-9a-zA-Z]+)/(.*) cardapio.php?nome=$1&mesa=$2
+RewriteRule ^c/([0-9a-zA-Z]+) cardapio.php?nome=$3
+RewriteRule ^dashboard dashboard.php
