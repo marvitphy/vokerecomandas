@@ -359,7 +359,9 @@
             overflow-x: scroll;
             overflow-y: hidden;
             white-space: nowrap;
-          
+            height: 35px;
+            margin-top:
+            
             
           }
           .card-scroll {
@@ -369,6 +371,7 @@
             margin-right: 5px;
             border-radius: 15px;
             padding: 2px 15px 2px 15px; 
+            
          
           }
 

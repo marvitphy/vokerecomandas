@@ -26,8 +26,6 @@
 </head>
 
 <body>
-
-
     <div id="app">
         <div class="toolbar toolbar--material">
             <div title="asdfasdf" class="toolbar__left toolbar--material__left">
@@ -70,6 +68,7 @@
 
             </div>
         </div>
+        
         <div class="all">
 
             <div class="cardapio " style="height: 135px; z-index: 1000; padding-top: 20px; padding-bottom: 0px;">
@@ -83,11 +82,13 @@
                 </div>
             </div>
             <div class="infos" style="margin-bottom: 3px;">
-                <span class="item chamarG"><i class="fas fa-bell"></i> Chamar Garçon</span>
+                <span class="item chamarG"><i class="fas fa-bell"></i> Chamar o Garçom</span>
             </div>
 
         </div>
-        <div class="scrolling-wrapper categorias mb-2 mt-2">
+        <div class="scrolling-wrapper categorias mb-2 mt-3">
+
+            
 
         </div>
 

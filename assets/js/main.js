@@ -18,6 +18,22 @@ $(document).ready(function () {
             }
             $('.categoria-empresa').text(cat)
         });
+    axios.get('http://api.vcomandas.com/v1/categorias?link=' + link)
+        .then(function (response) {
+            console.log(response.data); 
+            var cat_nome
+            for(var pos in response.data){
+                $('.categorias').append(`<div class="card-scroll">
+                <span class="cat-nome">${response.data[pos].nome}</span>
+            </div>`)
+            }
+            
+            $('.cat-nome').click(function(){
+                cat_nome = $(this).text()
+                console.log(cat_nome)
+            })
+
+        });
 
 
     (async () => {
