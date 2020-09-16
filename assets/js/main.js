@@ -165,7 +165,7 @@ $(document).ready(function () {
 
         function cadastrarProduto(produto, preco, qtd) {
 
-            let novoProduto = { nome: produto, preco: preco, qtd: qtd}
+            let novoProduto = { nome: produto, preco: preco, qtd: qtd }
             let data = localStorage.getItem('produtos');
             data = JSON.parse(data)
             let produtos = localStorage.getItem('produtos');
@@ -175,6 +175,7 @@ $(document).ready(function () {
             localStorage.setItem("produtos", JSON.stringify(produtos));
             console.log(JSON.stringify(produtos))
             calcularTotal()
+
 
         }
 
@@ -197,10 +198,9 @@ $(document).ready(function () {
         })
 
         function carregarProdutos() {
-            
 
             let dados = localStorage.getItem('produtos');
-            if (dados == null || dados == '[]' || dados == 'undefined' || dados.length < 0) $('.carrinho-page').find('.list').append(`<li class="list-item">
+            if (dados == null) $('.carrinho-page').find('.list').append(`<li class="list-item">
             <div class="list-item__center">Sem itens no carrinho</div>
           </li>`)
             else {
@@ -242,7 +242,6 @@ $(document).ready(function () {
             }
 
             $('.del_from_cart').on('click', function () {
-                
                 $(this).closest('.list-item').fadeOut('slow', function () {
                     $(this).closest('.list-item').remove();
                 });
@@ -251,10 +250,6 @@ $(document).ready(function () {
                 var nome_prod_cart = $(this).closest('.list-item').find('.list-item__title').text();
                 let dados_2 = localStorage.getItem('produtos');
                 dados_2 = JSON.parse(dados_2)
-
-                    if (dados_2 == 'object' || dados_2 == '[]' || dados_2 == 'undefined' || dados_2.length < 0) $('.carrinho-page').find('.list').append(`<li class="list-item">
-                <div class="list-item__center">Sem itens no carrinho</div>
-            </li>`)
 
                 var index = dados_2.findIndex(dados_2 => dados_2.nome == nome_prod_cart);
                 delete dados_2[index]
@@ -265,7 +260,6 @@ $(document).ready(function () {
                 dados_3 = JSON.parse(dados_3)
                 $('.total-cart').text(dados_3.length)
                 calcularTotal()
-                
 
             })
 
@@ -275,7 +269,6 @@ $(document).ready(function () {
 
 
         carregarProdutos();
-        
 
 
     })()
@@ -308,6 +301,7 @@ $(document).ready(function () {
 
     $(window).on('hashchange', function (e) {
         var hash = window.location.hash
+
         if (hash == '#carrinho') {
             $('.carrinho-btn').click()
         } else if (hash == '') {
