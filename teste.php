@@ -1,36 +1,3 @@
-<?php
-
-include 'config.php';
-$nome = $_GET['nome'];
-$sql = "SELECT * FROM categorias where link = '$nome' ORDER BY nome ASC;";
-$result = $db->query($sql);
-$sql_user = "SELECT nomeEmpresa, id, categoria, link, descricao  FROM users where link = '$nome' ";
-$result_user = $db->query($sql_user);
-$rows_user = mysqli_fetch_array($result_user);
-
-$value = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-session_start();
-
-if (isset($_POST["nome"]) && isset($_POST["e"])) {
-    $email = $_POST["e"];
-    $nome = $_POST["nome"];
-    $wpp = $_POST['telefone'];
-    $sql = "INSERT INTO users_clientes (email, nome, telefone) VALUES ('$email', '$nome', '$wpp')";
-    $query = mysqli_query($db, $sql);
-    setcookie("nome", $nome);
-    setcookie("email", $email);
-    $_SESSION['username'] = $nome;
-    $_SESSION['email_cliente'] = $email;
-    $rows = mysqli_num_rows($query);
-}
-
-$sql_produtos = "SELECT * from produtos where link
- = 'vpizzaria' ";
-$query_produtos = mysqli_query($db, $sql_produtos);
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 

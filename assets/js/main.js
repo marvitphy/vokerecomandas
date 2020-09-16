@@ -126,7 +126,7 @@ $(document).ready(function () {
             $('.preco-final').text('R$ ' + total.toFixed(2).replace('.', ','))
         }
 
-        calcularTotal()
+       
 
 
         function cadastrarProduto(produto, preco, qtd) {
@@ -200,8 +200,12 @@ $(document).ready(function () {
             function total_cart() {
                 $('.total-cart').text(dados.length)
             }
-            total_cart();
-
+            if (dados != null){
+                total_cart();
+             
+                    calcularTotal()
+                
+            }
 
             $('.del_from_cart').on('click', function () {
                 $(this).closest('.list-item').fadeOut('slow', function(){
@@ -231,6 +235,7 @@ $(document).ready(function () {
 
 
         carregarProdutos();
+        
 
     })()
 
