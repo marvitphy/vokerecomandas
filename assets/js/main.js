@@ -49,6 +49,8 @@ $(document).ready(function () {
         var cat_nome_filter
 
         $('.cat-nome').on('click', function () {
+            $('.cat-nome').closest('.card-scroll').removeClass('selected')
+            $(this).closest('.card-scroll').addClass('selected')
             cat_nome_filter = $(this).text();
             var produtos_filtrados = all_produtos.filter(element => element.categoria == cat_nome_filter)
             console.log(produtos_filtrados)
@@ -292,21 +294,17 @@ $(document).ready(function () {
         $('.pedir-page').css('transform', 'translateX(100%)')
         window.location.hash = 'carrinho';
     })
+    var hash = window.location.hash
+    hash == '#carrinho' ? $('.carrinho-btn').click() : false
+    hash == '#pedirconta' ? $('.pedir-btn').click() : false
+    hash == undefined ? $('.cardapio-btn').click() : false
 
-    if (window.location.hash == '#carrinho') {
-        $('.carrinho-btn').click()
-    }
-    if (window.location.hash == '#pedirconta') {
-        $('.pedir-btn').click()
-    } else {
-        $('.cardapio-btn').click()
-    }
     $(window).on('hashchange', function (e) {
         var hash = window.location.hash
-        console.log('hash mudou ' + window.location.hash)
+        alert('hash mudou ' + window.location.hash)
         if (hash == '#carrinho') {
             $('.carrinho-btn').click()
-        } else if (hash == 'undefined') {
+        } else if (hash == '') {
             $('.cardapio-btn').click()
         }
     });

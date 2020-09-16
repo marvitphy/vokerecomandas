@@ -135,7 +135,7 @@
 
     <div class="carrinho-page">
 
-        <ul class="list">
+        <ul class="list fixed-top">
             <li class="list-header">
                 itens no carrinho:
             </li>
