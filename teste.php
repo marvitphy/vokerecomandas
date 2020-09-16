@@ -86,7 +86,7 @@
             </div>
 
         </div>
-        <div class="scrolling-wrapper categorias mb-2 mt-3">
+        <div class="scrolling-wrapper categorias mb-1 mt-3">
 
             
 

@@ -20,15 +20,15 @@ $(document).ready(function () {
         });
     axios.get('http://api.vcomandas.com/v1/categorias?link=' + link)
         .then(function (response) {
-            console.log(response.data); 
+            console.log(response.data);
             var cat_nome
-            for(var pos in response.data){
+            for (var pos in response.data) {
                 $('.categorias').append(`<div class="card-scroll">
                 <span class="cat-nome">${response.data[pos].nome}</span>
             </div>`)
             }
-            
-            $('.cat-nome').click(function(){
+
+            $('.cat-nome').click(function () {
                 cat_nome = $(this).text()
                 console.log(cat_nome)
             })
@@ -42,16 +42,21 @@ $(document).ready(function () {
             method: 'get'
         })
         $('.progress-bar').hide();
-
-        console.log(response)
-        for (var i = 0; i < response.data.length; i++) {
-            var foto
-            if (response.data[i].foto == '') {
-                foto = 'https://www.ferramentastenace.com.br/wp-content/uploads/2017/11/sem-foto.jpg'
-            } else {
-                foto = `/views/${response.data[i].foto}`
-            }
-            $('.produtos-all').append(`<ul class="list produtos">
+        var all_produtos = response.data
+        var cat_nome_filter
+        $('.cat-nome').on('click', function () {
+             cat_nome_filter = $(this).text();
+            var produtos_filtrados = all_produtos.filter(element => element.categoria == cat_nome_filter)
+            console.log(produtos_filtrados)
+            $('.produtos-all').html('')
+            for (var i = 0; i < produtos_filtrados.length; i++) {
+                var foto
+                if (produtos_filtrados[i].foto == '') {
+                    foto = 'https://www.ferramentastenace.com.br/wp-content/uploads/2017/11/sem-foto.jpg'
+                } else {
+                    foto = `/views/${produtos_filtrados[i].foto}`
+                }
+                $('.produtos-all').append(`<ul class="list produtos">
 
             <li class="list-item produtos-list">
                 <div class="list-item__left">
@@ -59,69 +64,75 @@ $(document).ready(function () {
                 </div>
 
                 <div class="list-item__center">
-                    <div class="list-item__title prod_nome">${response.data[i].nome}</div>
-                    <div class="list-item__subtitle">${response.data[i].descricao}</div>
+                    <div class="list-item__title prod_nome">${produtos_filtrados[i].nome}</div>
+                    <div class="list-item__subtitle">${produtos_filtrados[i].descricao}</div>
                 </div>
                 <div class="list-item__right">
-                    <span class="notification preco">${response.data[i].preco}</span>
+                    <span class="notification preco">${produtos_filtrados[i].preco}</span>
                     <div class="list-item__label addProd" style="font-size: 28px; color: #0fa824; opacity: 100%"><i class=" fas fa-plus-circle "></i></div>
                 </div>
             </li>
         </ul>`)
-        }
-
-        $('.preco').prepend('R$')
-
-        var prod_nome
-        var preco_prod
-        var str_preco
-        var new_price
-        $('.addProd').on('click', function () {
-            prod_nome = $(this).closest('.produtos').find('.prod_nome').text();
-            preco_prod = $(this).closest('.produtos').find('.preco').text();
-            str_preco = parseFloat(preco_prod.replace(/[^0-9\.]+/g, ""));
-            $('.modal-vk-body').show();
-            $('.nome_produto').text(prod_nome)
-            $('.preco_show').text('R$ ' + str_preco.toFixed(2).replace('.', ','))
-            $('.preco_show_2').text(str_preco)
-
-        });
-        $('.fechar-modal').click(function () {
-            $('.modal-vk-body').hide();
-            $('.qtd_number').val(1)
-        })
-
-        $('.add_qtd').click(function () {
-            var qtd_1 = $('.qtd_number').val()
-            var qtd_updated = parseInt(qtd_1) + 1
-            new_price = str_preco * qtd_updated;
-            $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
-            $('.preco_show_2').text(new_price)
-            $('.qtd_number').val(qtd_updated)
-        })
-
-        $('.del_qtd').click(function () {
-            var qtd_2 = $('.qtd_number').val()
-            var qtd_updated = parseInt(qtd_2) - 1
-            new_price = str_preco * qtd_updated;
-            if ($('.qtd_number').val() - 1 == 1) {
-                $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
-                $('.preco_show_2').text(new_price)
             }
-            if ($('.qtd_number').val() <= 1) {
+            $('.preco').prepend('R$')
+
+            var prod_nome
+            var preco_prod
+            var str_preco
+            var new_price
+            $('.addProd').on('click', function () {
+                prod_nome = $(this).closest('.produtos').find('.prod_nome').text();
+                preco_prod = $(this).closest('.produtos').find('.preco').text();
+                str_preco = parseFloat(preco_prod.replace(/[^0-9\.]+/g, ""));
+                $('.modal-vk-body').show();
+                $('.nome_produto').text(prod_nome)
+                $('.preco_show').text('R$ ' + str_preco.toFixed(2).replace('.', ','))
+                $('.preco_show_2').text(str_preco)
+
+            });
+            $('.fechar-modal').click(function () {
+                $('.modal-vk-body').hide();
                 $('.qtd_number').val(1)
+            })
+
+            $('.add_qtd').click(function () {
+                var qtd_1 = $('.qtd_number').val()
+                var qtd_updated = parseInt(qtd_1) + 1
+                new_price = str_preco * qtd_updated;
                 $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
                 $('.preco_show_2').text(new_price)
-            } else {
+                $('.qtd_number').val(qtd_updated)
+            })
+
+            $('.del_qtd').click(function () {
+                var qtd_2 = $('.qtd_number').val()
+                var qtd_updated = parseInt(qtd_2) - 1
+                new_price = str_preco * qtd_updated;
                 if ($('.qtd_number').val() - 1 == 1) {
                     $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
                     $('.preco_show_2').text(new_price)
                 }
-                $('.qtd_number').val(parseInt(qtd_2) - 1)
-                $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
-                $('.preco_show_2').text(new_price)
-            }
+                if ($('.qtd_number').val() <= 1) {
+                    $('.qtd_number').val(1)
+                    $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
+                    $('.preco_show_2').text(new_price)
+                } else {
+                    if ($('.qtd_number').val() - 1 == 1) {
+                        $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
+                        $('.preco_show_2').text(new_price)
+                    }
+                    $('.qtd_number').val(parseInt(qtd_2) - 1)
+                    $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
+                    $('.preco_show_2').text(new_price)
+                }
+            })
+
+
         })
+
+
+
+
         function checar_null() {
             let dados_2 = localStorage.getItem('produtos');
             dados_2 = JSON.parse(dados_2)
@@ -142,7 +153,7 @@ $(document).ready(function () {
             $('.preco-final').text('R$ ' + total.toFixed(2).replace('.', ','))
         }
 
-       
+
 
 
         function cadastrarProduto(produto, preco, qtd) {
@@ -216,18 +227,18 @@ $(document).ready(function () {
             function total_cart() {
                 $('.total-cart').text(dados.length)
             }
-            if (dados != null){
+            if (dados != null) {
                 total_cart();
-             
-                    calcularTotal()
-                
+
+                calcularTotal()
+
             }
 
             $('.del_from_cart').on('click', function () {
-                $(this).closest('.list-item').fadeOut('slow', function(){
+                $(this).closest('.list-item').fadeOut('slow', function () {
                     $(this).closest('.list-item').remove();
                 });
-                
+
 
                 var nome_prod_cart = $(this).closest('.list-item').find('.list-item__title').text();
                 let dados_2 = localStorage.getItem('produtos');
@@ -251,24 +262,24 @@ $(document).ready(function () {
 
 
         carregarProdutos();
-        
+
 
     })()
 
     $('.finalizar-pedido').click(function () {
-        var tempText="";
+        var tempText = "";
         var pedido_montado = []
-        let nome_all = $('.carrinho-page').find('.list-item__subtitle').each(function(){
-                var teste = $(this).text();
-                teste = teste.replace(/\D/g,'');
-                
-                arr = teste + 'un. ' +$(this).closest('.list-item').find('.list-item__title').text()
-                pedido_montado.push(arr)
-            });
-            console.log(pedido_montado) 
-            
+        let nome_all = $('.carrinho-page').find('.list-item__subtitle').each(function () {
+            var teste = $(this).text();
+            teste = teste.replace(/\D/g, '');
+
+            arr = teste + 'un. ' + $(this).closest('.list-item').find('.list-item__title').text()
+            pedido_montado.push(arr)
+        });
+        console.log(pedido_montado)
+
     })
- 
+
 
     $('.carrinho-btn').on('click', function () {
         $('.total-price').fadeIn('slow');
@@ -320,44 +331,44 @@ $(document).ready(function () {
 
 
     var $seuCampoCpf = $("#CPF");
-        $seuCampoCpf.mask('000.000.000-00', {reverse: true});
+    $seuCampoCpf.mask('000.000.000-00', { reverse: true });
 
-        function validateCPF(cpf) {
-            cpf = cpf.replace(/[^\d]+/g,'');
-            if(cpf == '') return false;
-            // Elimina CPFs invalidos conhecidos
-            if (cpf.length != 11 ||
-                cpf == "00000000000" ||
-                cpf == "11111111111" ||
-                cpf == "22222222222" ||
-                cpf == "33333333333" ||
-                cpf == "44444444444" ||
-                cpf == "55555555555" ||
-                cpf == "66666666666" ||
-                cpf == "77777777777" ||
-                cpf == "88888888888" ||
-                cpf == "99999999999")
-                    return false;
-            // Valida 1o digito
-            add = 0;
-            for (i=0; i < 9; i ++)
-                add += parseInt(cpf.charAt(i)) * (10 - i);
-                rev = 11 - (add % 11);
-                if (rev == 10 || rev == 11)
-                    rev = 0;
-                if (rev != parseInt(cpf.charAt(9)))
-                    return false;
-            // Valida 2o digito
-            add = 0;
-            for (i = 0; i < 10; i ++)
-                add += parseInt(cpf.charAt(i)) * (11 - i);
-            rev = 11 - (add % 11);
-            if (rev == 10 || rev == 11)
-                rev = 0;
-            if (rev != parseInt(cpf.charAt(10)))
-                return console.log(false);
-            return console.log(true);
-        }
+    function validateCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf == '') return false;
+        // Elimina CPFs invalidos conhecidos
+        if (cpf.length != 11 ||
+            cpf == "00000000000" ||
+            cpf == "11111111111" ||
+            cpf == "22222222222" ||
+            cpf == "33333333333" ||
+            cpf == "44444444444" ||
+            cpf == "55555555555" ||
+            cpf == "66666666666" ||
+            cpf == "77777777777" ||
+            cpf == "88888888888" ||
+            cpf == "99999999999")
+            return false;
+        // Valida 1o digito
+        add = 0;
+        for (i = 0; i < 9; i++)
+            add += parseInt(cpf.charAt(i)) * (10 - i);
+        rev = 11 - (add % 11);
+        if (rev == 10 || rev == 11)
+            rev = 0;
+        if (rev != parseInt(cpf.charAt(9)))
+            return false;
+        // Valida 2o digito
+        add = 0;
+        for (i = 0; i < 10; i++)
+            add += parseInt(cpf.charAt(i)) * (11 - i);
+        rev = 11 - (add % 11);
+        if (rev == 10 || rev == 11)
+            rev = 0;
+        if (rev != parseInt(cpf.charAt(10)))
+            return console.log(false);
+        return console.log(true);
+    }
 
 
 })
