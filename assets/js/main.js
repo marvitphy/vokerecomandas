@@ -22,16 +22,19 @@ $(document).ready(function () {
         .then(function (response) {
             console.log(response.data);
             var cat_nome
+
             for (var pos in response.data) {
                 $('.categorias').append(`<div class="card-scroll">
                 <span class="cat-nome">${response.data[pos].nome}</span>
             </div>`)
             }
 
+
             $('.cat-nome').click(function () {
                 cat_nome = $(this).text()
                 console.log(cat_nome)
             })
+
 
         });
 
@@ -44,8 +47,9 @@ $(document).ready(function () {
         $('.progress-bar').hide();
         var all_produtos = response.data
         var cat_nome_filter
+
         $('.cat-nome').on('click', function () {
-             cat_nome_filter = $(this).text();
+            cat_nome_filter = $(this).text();
             var produtos_filtrados = all_produtos.filter(element => element.categoria == cat_nome_filter)
             console.log(produtos_filtrados)
             $('.produtos-all').html('')
@@ -125,13 +129,14 @@ $(document).ready(function () {
                     $('.preco_show').text('R$ ' + new_price.toFixed(2).replace('.', ','))
                     $('.preco_show_2').text(new_price)
                 }
+
             })
 
 
         })
 
 
-
+        $('.cat-nome').first().click()
 
         function checar_null() {
             let dados_2 = localStorage.getItem('produtos');
