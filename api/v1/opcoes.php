@@ -12,9 +12,9 @@ header("Access-Control-Allow-Headers: Content-Type, X-Request-With, X-Requested-
 
 include 'config.php';
 
-$user_id = $_POST['id'];
+$user_id = $_POST['link'];
 
-$sql = "SELECT * FROM especificacoes where user_id = '$user_id'";
+$sql = "SELECT * FROM especificacoes where link = '$user_id'";
 $result = mysqli_query($db, $sql);
 
 $result_json = array();
